@@ -8,9 +8,12 @@ class FeedParserPro:
         print("Parser online") 
 
         try:
-            with open("test.csv",'r') as file:
-                self.csv_headers = csv.DictReader(file) 
-                self.csv_headers = next(self.csv_headers).keys() #Get the headers from the file object
+            with open("test.csv",'r') as rfile:
+                self.csv_headers = csv.DictReader(rfile)
+                self.csv_headers = set(next(self.csv_headers).keys()) #Get the headers from the file object
+                self.writer_csv = open("test.csv",'a')
+                self.writer_csv = csv.DictWriter(self.writer_csv,list(self.csv_headers))
+
         except:
             pass            
 
@@ -28,30 +31,56 @@ class FeedParserPro:
             except KeyboardInterrupt:
                 break
 
-        # <!-- TODO I AM ASSUMING THAT THIS IS A VALID RSS URL, NEED TO PUT ADDITIONAL CHECKS LATER
+        # <!-- TODO I AM ASSUMING THAT AT THIS POINT IT IS A VALID RSS URL, NEED TO PUT ADDITIONAL CHECKS LATER
 
-    
+        FeedParserPro._diff(self)
+
+   
+    def _diff(self):
+        assert isinstance(self.csv_headers,set), "You need to fetch a RSS feed first"
+        missing = (set(self.RSS.keymap) & self.csv_headers) ^ self.csv_headers
+        print(missing)
+
+    def write(self):
+        csv = self.writer_csv
+        print(type(csv))
+
+                
 
 
 
-#
-#
-#
-#
-#        while(not self.RSS["feed"]):
-#            try:
-#                if not self.RSS["feed"]:
-#                    raise SyntaxError (f"{self.RSS['bozo_exception']}\n\tPlease input a valid url.")
-#            except SyntaxError as err:
-#                print(err)
-#                self.RSS = feedparser.parse(input())
-#        print("Response Aquired")
-#
-#    def 
-#        
-#
-#
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
