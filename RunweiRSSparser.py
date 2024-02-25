@@ -14,23 +14,22 @@ class FeedParserPro:
             while(notFile):
                 try:
                     file = input("Please input a csv file to write to: ")
+                    notFile = (not os.path.isfile(file)) and (".csv" not in file)
                 except KeyboardInterrupt:
-                    raise KeyboardInterrupt ("Aborting program")
-                notFile = (not os.path.isfile(file)) and (".csv" not in file)
-            try:
-                with open("test.csv",'r') as rfile:
-                    self.csv_headers = csv.DictReader(rfile)
-                    self.csv_headers = set(next(self.csv_headers).keys()) #Get the headers from the file object
-                    self.writer_csv = open("righthere.csv",'w')
-                    #self.writer_csv = csv.DictWriter(self.writer_csv,list(self.csv_headers))
+                    raise KeyboardInterrupt ("Abort program")
 
-            except:
-                pass            
+            with open(file,'r') as rfile:
+                self.csv_headers = csv.DictReader(rfile)
+                self.csv_headers = next(self.csv_headers).keys() #Get the headers from the file object
+                self.writer_csv = open("righthere.csv",'w')
+                #self.writer_csv = csv.DictWriter(self.writer_csv,list(self.csv_headers))
+        else:
+            self.csv_headers = False
+            print("Skipped if statement")
 
     def fetch(self,xmlFeed):
         self.RSS = feedparser.parse(xmlFeed) #Fetch RSS feed
         while(not self.RSS["feed"]): # If it is not there ...
-
             try:
                 raise ValueError ("\n--> No feed received.\n--> Please enter another RSS feed URL.\n")
             except ValueError as err:
@@ -43,8 +42,8 @@ class FeedParserPro:
 
         # <!-- TODO I AM ASSUMING THAT AT THIS POINT IT IS A VALID RSS URL, NEED TO PUT ADDITIONAL CHECKS LATER
 
-        FeedParserPro._diff(self)
-
+        if self.csv_headers: 
+            FeedParserPro._diff(self)
    
     def _diff(self):
         assert isinstance(self.csv_headers,set), "You need to fetch a RSS feed first"
@@ -55,7 +54,8 @@ class FeedParserPro:
         print(container)
         self.missing = (set(container) & self.csv_headers) ^ self.csv_headers
 
-    #def write(self):
+    def write(self):
+        print("This is the write file")
         
         
         
