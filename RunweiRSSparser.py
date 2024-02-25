@@ -2,21 +2,30 @@
 import csv
 import feedparser
 from chat import Chat
+import os.path
 
 class FeedParserPro:
 
-    def __init__(self):
+    def __init__(self,append_file=False):
         print("Parser online") 
 
-        try:
-            with open("test.csv",'r') as rfile:
-                self.csv_headers = csv.DictReader(rfile)
-                self.csv_headers = set(next(self.csv_headers).keys()) #Get the headers from the file object
-                self.writer_csv = open("righthere.csv",'w')
-                #self.writer_csv = csv.DictWriter(self.writer_csv,list(self.csv_headers))
+        if(append_file):
+            notFile = True;
+            while(notFile):
+                try:
+                    file = input("Please input a csv file to write to: ")
+                except KeyboardInterrupt:
+                    raise KeyboardInterrupt ("Aborting program")
+                notFile = (not os.path.isfile(file)) and (".csv" not in file)
+            try:
+                with open("test.csv",'r') as rfile:
+                    self.csv_headers = csv.DictReader(rfile)
+                    self.csv_headers = set(next(self.csv_headers).keys()) #Get the headers from the file object
+                    self.writer_csv = open("righthere.csv",'w')
+                    #self.writer_csv = csv.DictWriter(self.writer_csv,list(self.csv_headers))
 
-        except:
-            pass            
+            except:
+                pass            
 
     def fetch(self,xmlFeed):
         self.RSS = feedparser.parse(xmlFeed) #Fetch RSS feed
@@ -46,7 +55,7 @@ class FeedParserPro:
         print(container)
         self.missing = (set(container) & self.csv_headers) ^ self.csv_headers
 
-    def write(self):
+    #def write(self):
         
         
         
