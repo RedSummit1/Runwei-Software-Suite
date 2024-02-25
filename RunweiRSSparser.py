@@ -20,12 +20,12 @@ class FeedParserPro:
 
             with open(file,'r') as rfile:
                 self.csv_headers = csv.DictReader(rfile)
-                self.csv_headers = next(self.csv_headers).keys() #Get the headers from the file object
-                self.writer_csv = open("righthere.csv",'w')
+                self.csv_headers = set(next(self.csv_headers).keys()) #Get the headers from the file object
+                self.writer_csv = open("righthere.csv",'a')
                 #self.writer_csv = csv.DictWriter(self.writer_csv,list(self.csv_headers))
         else:
             self.csv_headers = False
-            print("Skipped if statement")
+            self.missing = False
 
     def fetch(self,xmlFeed):
         self.RSS = feedparser.parse(xmlFeed) #Fetch RSS feed
@@ -44,6 +44,8 @@ class FeedParserPro:
 
         if self.csv_headers: 
             FeedParserPro._diff(self)
+        else:
+            FeedParserPro._read_headers(self)
    
     def _diff(self):
         assert isinstance(self.csv_headers,set), "You need to fetch a RSS feed first"
@@ -52,20 +54,16 @@ class FeedParserPro:
             for l in l.keys():
                 container.add(l)
         print(container)
-        self.missing = (set(container) & self.csv_headers) ^ self.csv_headers
+        self.missing = (set(container) & self.csv_headers) ^ self.csv_headers)
+
+    def _read_headers(self):
+        print("The headers are\n\n" + "\n".join(self.RSS.entries[0].keys()))
 
     def write(self):
         print("This is the write file")
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        if self.missing:
+            print("There is",len(self.missing),"label heade{} missing:".format("rs" if len(self.missing) > 1 else "r"),self.missing)
         
         
 
