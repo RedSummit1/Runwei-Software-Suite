@@ -14,7 +14,7 @@ class FeedParserPro:
             while(notFile):
                 try:
                     file = input("Please input a csv file to write to: ")
-                    notFile = (not os.path.isfile(file)) and (".csv" not in file)
+                    notFile = (not os.path.isfile(file)) or (".csv" not in file)
                 except KeyboardInterrupt:
                     raise KeyboardInterrupt ("Abort program")
 
@@ -54,63 +54,79 @@ class FeedParserPro:
             for l in l.keys():
                 container.add(l)
         print(container)
-        self.missing = (set(container) & self.csv_headers) ^ self.csv_headers)
+        self.missing = (set(container) & self.csv_headers) ^ self.csv_headers
 
     def _read_headers(self):
         print("The headers are\n\n" + "\n".join(self.RSS.entries[0].keys()))
+        self.csv_headers = list(self.RSS.entries[0].keys())
 
-    def write(self):
+    def write(self,writeto=None):
         print("This is the write file")
         
         if self.missing:
             print("There is",len(self.missing),"label heade{} missing:".format("rs" if len(self.missing) > 1 else "r"),self.missing)
-        
-        
-
-
-
-#        response = []
-#        res = []
-#        di = {}
-#        if self.missing:
-#            model = Chat()
-#            print(self.missing)
-#            for i,entry in enumerate(self.RSS["entries"][:1]):
-#                response.append(model.read("""
-#
-#                Look through this RSS Feed channel response and give me a variable length record with the delimiter being a comma
-#                Example:{}
-#
-#                Keys:{}
-#                xmlFeed:{}
-#                
-#                """.format("""
-#                    (Key:value),\n
-#                    """,self.missing,entry)))            
-#
-#                response[i] = response[i].split('\n')
-#                print("Done")
-#
-#            #test = dict.fromkeys(list(self.missing),None);
-#            response_list = (r.split('\n') for res in response for r in res)
-#
-#            #print("This is testing",testing)
-#
-#            entry_properties = {}
-#            for i,lst in enumerate(response_list):
-#                var = lst[0].split(':')
-#                entry_properties.update({var[0]:var[1]})
-#                print("This is the entry right here\n",entry_properties)
-#                #print({var[0]:var[1] for var[0],var[1] in var})
-#
-#            self.writer_csv = csv.DictWriter(self.writer_csv,entry_properties.keys())
-#            self.writer_csv.writerow(entry_properties)
-#            print("WE ARE HERE")
-#            
-
-
-
             
+#            response = []
+#            res = []
+#            di = {}
+#            if self.missing:
+#                model = Chat()
+#                print(self.missing)
+#                for i,entry in enumerate(self.RSS["entries"][:1]):
+#                    response.append(model.read("""
+#
+#                    Look through this RSS Feed channel response and give me a variable length record with the delimiter being a comma
+#                    Example:{}
+#
+#                    Keys:{}
+#                    xmlFeed:{}
+#                    
+#                    """.format("""
+#                        (Key:value),\n
+#                        """,self.missing,entry)))            
+#
+#                    response[i] = response[i].split('\n')
+#                    print("Done")
+#
+#                #test = dict.fromkeys(list(self.missing),None);
+#                response_list = (r.split('\n') for res in response for r in res)
+#
+#                #print("This is testing",testing)
+#
+#                entry_properties = {}
+#                for i,lst in enumerate(response_list):
+#                    var = lst[0].split(':')
+#                    entry_properties.update({var[0]:var[1]})
+#                    print("This is the entry right here\n",entry_properties)
+#                    #print({var[0]:var[1] for var[0],var[1] in var})
+#
+#                self.writer_csv = csv.DictWriter(self.writer_csv,entry_properties.keys())
+#                self.writer_csv.writerow(entry_properties)
+#                print("WE ARE HERE")
+#                
+        else:
+            print("Not missing")
+            if not writeto:
+                notFile = True
+                while notFile:
+                    try:
+                        file = input("Please input a csv file to write to: ")
+                        notFile = (not os.path.isfile(file)) or (".csv" not in file)
+                    except KeyboardInterrupt:
+                        raise KeyboardInterrupt ("Abort program")
+                writeto = file
+            with open(writeto, 'w') as file:
+                self.writer_csv = csv.DictWriter(file,self.csv_headers)
+                self.writer_csv.writeheader()
+                for entry in self.RSS.entries:
+                    self.writer_csv.writerow(entry)
+
+            print("This is sooo cool!")
+
+
+
+
+                
 
 
 
