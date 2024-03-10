@@ -2,7 +2,7 @@
 from RunweiRSSparser import FeedParserPro
 
 parser = FeedParserPro()
-url = "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+url = "https://podcastfeeds.nbcnews.com/RPWEjhKq"
 parser.fetch(url)
 parser.write()
 
