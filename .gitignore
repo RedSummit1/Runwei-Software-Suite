@@ -5,3 +5,4 @@ __pycache__
 chat.py
 run.py
 *.json
+test.py
