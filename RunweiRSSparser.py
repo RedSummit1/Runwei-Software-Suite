@@ -57,7 +57,7 @@ class FeedParserPro:
         self.missing = (set(container) & self.csv_headers) ^ self.csv_headers
 
     def _read_headers(self):
-        print("The headers are\n\n" + "\n".join(self.RSS.entries[0].keys()))
+        #print("The headers are\n\n" + "\n".join(self.RSS.entries[0].keys()))
         self.csv_headers = list(self.RSS.entries[0].keys())
 
     def write(self, writeto=None):
@@ -75,3 +75,17 @@ class FeedParserPro:
                 self.writer_csv.writeheader()
                 for entry in self.RSS.entries:
                     self.writer_csv.writerow(entry)
+
+
+    #def to_sheet(self,):
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
