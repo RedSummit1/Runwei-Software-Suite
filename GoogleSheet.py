@@ -63,6 +63,7 @@ def writeValues(spreadSheetId:str):
         for _ in range(5):
             values.append(list(range(0,10,2)))
 
+        print(values)
         body = {"values":values}
         print(len(body["values"]))
         result = (
@@ -70,7 +71,7 @@ def writeValues(spreadSheetId:str):
             .values()
             .update(
                 spreadsheetId = spreadSheetId,
-                range=f"B1:F5",
+                range="B1:F5",
                 valueInputOption="USER_ENTERED",
                 body=body,
             )
