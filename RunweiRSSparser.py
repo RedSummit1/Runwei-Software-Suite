@@ -75,17 +75,3 @@ class FeedParserPro:
                 self.writer_csv.writeheader()
                 for entry in self.RSS.entries:
                     self.writer_csv.writerow(entry)
-
-
-    #def to_sheet(self,):
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        

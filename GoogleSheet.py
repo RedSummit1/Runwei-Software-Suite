@@ -32,10 +32,41 @@ def writeValues(spreadSheetId:str):
 
 #               Code that needs to be reviewed
 #<------------------------------------------------------------------------>
-#        parser = FeedParserPro()
-#        parser.fetch(rows[0][0])
-#        print(parser.csv_headers)
-#        csvheaders = {}.fromkeys(parser.csv_headers,[])
+        parser = FeedParserPro()
+
+        #print(rows[0][0])
+        #print(rows[1][0])
+        #print(rows[2][0])
+        #print(rows[3][0])
+        #print(rows[4][0])
+        #print(rows[5][0])
+
+        #parser.fetch(rows[0][0])
+        #parser.fetch(rows[4][0])
+        #print(parser.csv_headers)
+        csvheaders = ["title", "link", "summary", "published", "author"]
+        csvheaders = {k : [] for k in csvheaders}
+        for row in rows:
+            parser.csv_headers = None
+            parser.fetch(row[0])
+            item = parser.RSS.items().mapping["entries"][0]
+            #print("This is the item here",item,"\n\n\n\n")
+            for k in csvheaders:
+                csvheaders[k].append(item.get(k,None))
+        values.append(list(csvheaders.keys()))
+        print(values)
+        #print(c for c in csvheaders.values())
+        again = [*csvheaders.values()] 
+        #print("\n\n\nTesting",again)
+        print("Again",again)
+        t = zip(*again)
+        values.extend(list(z) for z in t)
+        print(values)
+
+#        for _ in values:
+#            print(len(_),"\n")
+#        
+
 #        #values = [values[0].append(header) for header in csvheaders]
 #        for row in rows:
 #            parser.csv_headers = None
@@ -60,9 +91,10 @@ def writeValues(spreadSheetId:str):
 
 #<------------------------------------------------------------------------>
 
-        for _ in range(5):
-            values.append(list(range(0,10,2)))
-
+#        for _ in range(5):
+#            values.append(list(range(0,5)))
+#        print(values)
+#
         print(values)
         body = {"values":values}
         print(len(body["values"]))
@@ -71,13 +103,13 @@ def writeValues(spreadSheetId:str):
             .values()
             .update(
                 spreadsheetId = spreadSheetId,
-                range="B1:F5",
+                range="B1:F7",
                 valueInputOption="USER_ENTERED",
                 body=body,
             )
             .execute()
         )
-        return type(result)
+        return result
 
         #parser = FeedParserPro()
         #for i,valu
